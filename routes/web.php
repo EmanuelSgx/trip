@@ -2,6 +2,11 @@
 
 use Illuminate\Support\Facades\Route;
 
+// Dashboard route
+Route::get('/dashboard', function () {
+    return view('spa');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
 // Catch all routes for the SPA
 Route::get('/{path?}', function () {
     return view('spa');
