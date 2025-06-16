@@ -22,5 +22,14 @@ class UserSeeder extends Seeder
             'role' => User::ROLE_ADMIN,
             'email_verified_at' => now(),
         ]);
+
+        // Create default regular user for testing
+        User::create([
+            'name' => 'Usuário Teste',
+            'email' => 'user@triptech.com',
+            'password' => Hash::make('user123'),
+            'role' => User::ROLE_USER,
+            'email_verified_at' => now(),
+        ]);
     }
 }

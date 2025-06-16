@@ -66,12 +66,13 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- Botões do Header - Perfil e Sair -->
                         <button
                             @click="router.push('/profile')"
-                            class="group relative mr-3 inline-flex transform items-center rounded-lg bg-gradient-to-r from-blue-500 to-indigo-500 px-4 py-2 font-medium text-white shadow-lg transition-all duration-200 hover:scale-105 hover:from-blue-600 hover:to-indigo-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                            class="group relative mr-3 inline-flex min-w-0 transform items-center justify-center rounded-lg bg-gradient-to-r from-blue-500 to-indigo-500 px-4 py-2 font-medium text-white shadow-lg transition-all duration-200 hover:scale-105 hover:from-blue-600 hover:to-indigo-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:px-5 sm:py-3"
                         >
                             <svg
-                                class="mr-2 h-4 w-4 transition-transform duration-200 group-hover:scale-110"
+                                class="mr-2 h-4 w-4 flex-shrink-0 transition-transform duration-200 group-hover:scale-110 sm:h-5 sm:w-5"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -83,14 +84,17 @@
                                     d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
                                 />
                             </svg>
-                            Perfil
+                            <span class="whitespace-nowrap text-sm font-bold tracking-wide sm:text-base">
+                                <span v-if="user?.role === 'admin'">PERFIL</span>
+                                <span v-else>Perfil</span>
+                            </span>
                         </button>
                         <button
                             @click="handleLogout"
-                            class="group relative inline-flex transform items-center rounded-lg bg-gradient-to-r from-red-500 to-pink-500 px-4 py-2 font-medium text-white shadow-lg transition-all duration-200 hover:scale-105 hover:from-red-600 hover:to-pink-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                            class="group relative inline-flex min-w-0 transform items-center justify-center rounded-lg bg-gradient-to-r from-red-500 to-pink-500 px-4 py-2 font-medium text-white shadow-lg transition-all duration-200 hover:scale-105 hover:from-red-600 hover:to-pink-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:px-5 sm:py-3"
                         >
                             <svg
-                                class="mr-2 h-4 w-4 transition-transform duration-200 group-hover:rotate-12"
+                                class="mr-2 h-4 w-4 flex-shrink-0 transition-transform duration-200 group-hover:rotate-12 sm:h-5 sm:w-5"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -102,7 +106,10 @@
                                     d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
                                 />
                             </svg>
-                            Sair
+                            <span class="whitespace-nowrap text-sm font-bold tracking-wide sm:text-base">
+                                <span v-if="user?.role === 'admin'">SAIR</span>
+                                <span v-else>Sair</span>
+                            </span>
                         </button>
                     </div>
                 </div>
@@ -326,177 +333,213 @@
 
             <!-- Filters and Actions -->
             <div class="mb-8 rounded-2xl border border-white/20 bg-white/80 shadow-xl backdrop-blur-sm">
-                <div class="px-6 py-6">
-                    <div class="flex flex-col space-y-6 lg:flex-row lg:items-end lg:justify-between lg:space-y-0">
-                        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
-                            <!-- Status Filter -->
-                            <div class="space-y-2">
-                                <label for="status-filter" class="block text-sm font-semibold text-gray-700">
-                                    <svg class="mr-1 inline h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            stroke-width="2"
-                                            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-                                        />
-                                    </svg>
-                                    Filtrar por Status
-                                </label>
-                                <select
-                                    id="status-filter"
-                                    v-model="filters.status"
-                                    @change="loadRequests"
-                                    class="block w-full rounded-xl border border-gray-200 bg-white/50 px-4 py-3 text-base shadow-sm backdrop-blur-sm transition-all duration-200 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                >
-                                    <option value="">📋 Todos os Status</option>
-                                    <option value="pending">⏳ Pendente</option>
-                                    <option value="approved">✅ Aprovado</option>
-                                    <option value="cancelled">❌ Cancelado</option>
-                                </select>
-                            </div>
+                <div>
+                    <div class="lg:items-center flex flex-col space-y-10 lg:flex-row lg:items-end lg:justify-between lg:space-y-0 lg:space-x-12">
+                        <!-- Filtros Section -->
+                        <div class="flex-1 pr-4 lg:pr-6 ">
+                            <div class="rounded-xl bg-gray-50/50 p-6 backdrop-blur-sm">
+                                <h3 class="mb-4 text-lg font-semibold text-gray-800">
+                                    🔍 Filtros de Busca
+                                </h3>
+                                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
+                                <!-- Status Filter -->
+                                <div class="space-y-2">
+                                    <label for="status-filter" class="block text-sm font-semibold text-gray-700">
+                                        <svg class="mr-1 inline h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                stroke-width="2"
+                                                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+                                            />
+                                        </svg>
+                                        Filtrar por Status
+                                    </label>
+                                    <select
+                                        id="status-filter"
+                                        v-model="filters.status"
+                                        @change="loadRequests()"
+                                        class="block w-full rounded-xl border border-gray-200 bg-white/50 px-4 py-3 text-base shadow-sm backdrop-blur-sm transition-all duration-200 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    >
+                                        <option value="">📋 Todos os Status</option>
+                                        <option value="pending">⏳ Pendente</option>
+                                        <option value="approved">✅ Aprovado</option>
+                                        <option value="cancelled">❌ Cancelado</option>
+                                    </select>
+                                </div>
 
-                            <!-- Destination Filter -->
-                            <div class="space-y-2">
-                                <label for="destination-filter" class="block text-sm font-semibold text-gray-700">
-                                    <svg class="mr-1 inline h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            stroke-width="2"
-                                            d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                                        />
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                                    </svg>
-                                    Buscar Destino
-                                </label>
-                                <input
-                                    id="destination-filter"
-                                    v-model="filters.destination"
-                                    @input="debouncedLoadRequests"
-                                    type="text"
-                                    placeholder="🌍 Ex: São Paulo, Rio de Janeiro..."
-                                    class="block w-full rounded-xl border border-gray-200 bg-white/50 px-4 py-3 text-base placeholder-gray-400 shadow-sm backdrop-blur-sm transition-all duration-200 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                />
-                            </div>
+                                <!-- Destination Filter -->
+                                <div class="space-y-2">
+                                    <label for="destination-filter" class="block text-sm font-semibold text-gray-700">
+                                        <svg class="mr-1 inline h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                stroke-width="2"
+                                                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                                            />
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        </svg>
+                                        Buscar Destino
+                                    </label>
+                                    <input
+                                        id="destination-filter"
+                                        v-model="filters.destination"
+                                        @input="debouncedLoadRequests"
+                                        type="text"
+                                        placeholder="🌍 Ex: São Paulo, Rio de Janeiro..."
+                                        class="block w-full rounded-xl border border-gray-200 bg-white/50 px-4 py-3 text-base placeholder-gray-400 shadow-sm backdrop-blur-sm transition-all duration-200 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    />
+                                </div>
 
-                            <!-- Date Filters -->
-                            <div class="space-y-2">
-                                <label for="date-from" class="block text-sm font-semibold text-gray-700">
-                                    <svg class="mr-1 inline h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            stroke-width="2"
-                                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                                        />
-                                    </svg>
-                                    📅 Data Início
-                                </label>
-                                <input
-                                    id="date-from"
-                                    v-model="filters.dateFrom"
-                                    @change="loadRequests"
-                                    type="date"
-                                    class="block w-full rounded-xl border border-gray-200 bg-white/50 px-4 py-3 text-base shadow-sm backdrop-blur-sm transition-all duration-200 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                />
-                            </div>
+                                <!-- Date Filters -->
+                                <div class="space-y-2">
+                                    <label for="date-from" class="block text-sm font-semibold text-gray-700">
+                                        <svg class="mr-1 inline h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                stroke-width="2"
+                                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                            />
+                                        </svg>
+                                        📅 Data Início
+                                    </label>
+                                    <input
+                                        id="date-from"
+                                        v-model="filters.dateFrom"
+                                        @change="loadRequests()"
+                                        type="date"
+                                        class="block w-full rounded-xl border border-gray-200 bg-white/50 px-4 py-3 text-base shadow-sm backdrop-blur-sm transition-all duration-200 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    />
+                                </div>
 
-                            <div class="space-y-2">
-                                <label for="date-to" class="block text-sm font-semibold text-gray-700">
-                                    <svg class="mr-1 inline h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            stroke-width="2"
-                                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                                        />
-                                    </svg>
-                                    📅 Data Fim
-                                </label>
-                                <input
-                                    id="date-to"
-                                    v-model="filters.dateTo"
-                                    @change="loadRequests"
-                                    type="date"
-                                    class="block w-full rounded-xl border border-gray-200 bg-white/50 px-4 py-3 text-base shadow-sm backdrop-blur-sm transition-all duration-200 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                />
+                                <div class="space-y-2">
+                                    <label for="date-to" class="block text-sm font-semibold text-gray-700">
+                                        <svg class="mr-1 inline h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                stroke-width="2"
+                                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                            />
+                                        </svg>
+                                        📅 Data Fim
+                                    </label>
+                                    <input
+                                        id="date-to"
+                                        v-model="filters.dateTo"
+                                        @change="loadRequests()"
+                                        type="date"
+                                        class="block w-full rounded-xl border border-gray-200 bg-white/50 px-4 py-3 text-base shadow-sm backdrop-blur-sm transition-all duration-200 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    />
+                                </div>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="flex justify-center space-x-3 lg:justify-end">
-                            <button
-                                v-if="user?.role === 'admin'"
-                                @click="notifyPendingRequests"
-                                class="group relative inline-flex transform items-center rounded-xl bg-gradient-to-r from-purple-500 to-indigo-500 px-6 py-3 font-semibold text-white shadow-lg transition-all duration-200 hover:scale-105 hover:from-purple-600 hover:to-indigo-600 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
-                            >
-                                <svg
-                                    class="mr-2 h-5 w-5 transition-transform duration-300 group-hover:scale-110"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
+                        <!-- Action Buttons Section - Grid 2x2 com melhor separação -->
+                        <div class="flex-shrink-0 pl-4 lg:pl-6">
+                            <div class="rounded-xl bg-gradient-to-br from-blue-50/60 to-indigo-50/60 p-6 backdrop-blur-sm">
+                                <h3 class="mb-4 text-center text-lg font-semibold text-gray-800">
+                                    ⚡ Ações Rápidas
+                                </h3>
+                                <div class="grid grid-cols-2 gap-4 lg:gap-5">
+                                <!-- Linha Superior -->
+                                <!-- Botão Notificar Pendentes (apenas admin) - Superior Esquerda -->
+                                <button
+                                    v-if="user?.role === 'admin'"
+                                    @click="notifyPendingRequests"
+                                    class="group relative inline-flex w-20 transform flex-col items-center justify-center rounded-xl bg-gradient-to-r from-purple-500 to-indigo-500 px-2 py-2.5 font-semibold text-white shadow-lg transition-all duration-200 hover:scale-105 hover:from-purple-600 hover:to-indigo-600 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 sm:w-24 sm:px-3 sm:py-3"
                                 >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M15 17h5l-5 5v-5zM12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                                    />
-                                </svg>
-                                🔔 Notificar Pendentes
-                            </button>
-                            <button
-                                @click="clearFilters"
-                                class="group relative inline-flex transform items-center rounded-xl bg-gradient-to-r from-gray-500 to-gray-600 px-6 py-3 font-semibold text-white shadow-lg transition-all duration-200 hover:scale-105 hover:from-gray-600 hover:to-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
-                            >
-                                <svg
-                                    class="mr-2 h-5 w-5 transition-transform duration-300 group-hover:rotate-180"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
+                                    <svg
+                                        class="mb-1 h-4 w-4 flex-shrink-0 transition-transform duration-300 group-hover:scale-110 sm:h-5 sm:w-5"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M15 17h5l-5 5v-5zM12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                                        />
+                                    </svg>
+                                    <span class="text-center text-xs font-bold leading-tight tracking-wide sm:text-sm">
+                                        🔔<br />AVISAR
+                                    </span>
+                                </button>
+
+                                <!-- Botão Limpar Filtros - Superior Direita -->
+                                <button
+                                    @click="clearFilters"
+                                    class="group relative inline-flex w-20 transform flex-col items-center justify-center rounded-xl bg-gradient-to-r from-gray-500 to-gray-600 px-2 py-2.5 font-semibold text-white shadow-lg transition-all duration-200 hover:scale-105 hover:from-gray-600 hover:to-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 sm:w-24 sm:px-3 sm:py-3"
                                 >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                                    />
-                                </svg>
-                                Limpar Filtros
-                            </button>
-                            <button
-                                @click="exportRequests"
-                                :disabled="!requests.data || requests.data.length === 0"
-                                class="group relative inline-flex transform items-center rounded-xl bg-gradient-to-r from-green-500 to-emerald-500 px-6 py-3 font-semibold text-white shadow-lg transition-all duration-200 hover:scale-105 hover:from-green-600 hover:to-emerald-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100"
-                            >
-                                <svg
-                                    class="mr-2 h-5 w-5 transition-transform duration-300 group-hover:scale-110"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
+                                    <svg
+                                        class="mb-1 h-4 w-4 flex-shrink-0 transition-transform duration-300 group-hover:rotate-180 sm:h-5 sm:w-5"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                                        />
+                                    </svg>
+                                    <span class="text-center text-xs font-bold leading-tight tracking-wide sm:text-sm">
+                                        <span v-if="user?.role === 'admin'">🔄<br />LIMPAR</span>
+                                        <span v-else>🔄<br />Limpar</span>
+                                    </span>
+                                </button>
+
+                                <!-- Linha Inferior -->
+                                <!-- Botão Exportar CSV - Inferior Esquerda -->
+                                <button
+                                    @click="exportRequests"
+                                    :disabled="!requests.data || requests.data.length === 0"
+                                    class="group relative inline-flex w-20 transform flex-col items-center justify-center rounded-xl bg-gradient-to-r from-green-500 to-emerald-500 px-2 py-2.5 font-semibold text-white shadow-lg transition-all duration-200 hover:scale-105 hover:from-green-600 hover:to-emerald-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100 sm:w-24 sm:px-3 sm:py-3"
                                 >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                                    />
-                                </svg>
-                                📊 Exportar CSV
-                            </button>
-                            <button
-                                @click="showCreateModal = true"
-                                class="group relative inline-flex transform items-center rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-3 font-semibold text-white shadow-lg transition-all duration-200 hover:scale-105 hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                            >
-                                <svg
-                                    class="mr-2 h-5 w-5 transition-transform duration-300 group-hover:rotate-90"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
+                                    <svg
+                                        class="mb-1 h-4 w-4 flex-shrink-0 transition-transform duration-300 group-hover:scale-110 sm:h-5 sm:w-5"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                                        />
+                                    </svg>
+                                    <span class="text-center text-xs font-bold leading-tight tracking-wide sm:text-sm">
+                                        <span v-if="user?.role === 'admin'">📊<br />DADOS</span>
+                                        <span v-else>📊<br />Dados</span>
+                                    </span>
+                                </button>
+
+                                <!-- Botão Nova Solicitação - Inferior Direita -->
+                                <button
+                                    @click="showCreateModal = true"
+                                    class="group relative inline-flex w-20 transform flex-col items-center justify-center rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-2 py-2.5 font-semibold text-white shadow-lg transition-all duration-200 hover:scale-105 hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:w-24 sm:px-3 sm:py-3"
                                 >
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                                </svg>
-                                ✈️ Nova Solicitação
-                            </button>
+                                    <svg
+                                        class="mb-1 h-4 w-4 flex-shrink-0 transition-transform duration-300 group-hover:rotate-90 sm:h-5 sm:w-5"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                    </svg>
+                                    <span class="text-center text-xs font-bold leading-tight tracking-wide sm:text-sm">
+                                        <span v-if="user?.role === 'admin'">✈️<br />CRIAR</span>
+                                        <span v-else>✈️<br />Criar</span>
+                                    </span>
+                                </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -651,9 +694,14 @@
                                         <div class="relative">
                                             <button
                                                 @click="toggleStatusDropdown(request.id)"
-                                                class="group relative inline-flex transform items-center rounded-lg bg-gradient-to-r from-blue-500 to-indigo-500 px-3 py-2 font-medium text-white shadow-lg transition-all duration-200 hover:scale-105 hover:from-blue-600 hover:to-indigo-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                                                :class="[
+                                                    'group relative inline-flex transform items-center rounded-lg font-medium text-white shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
+                                                    user?.role === 'admin' 
+                                                        ? 'bg-gradient-to-r from-blue-500 to-indigo-500 px-4 py-3 text-base hover:scale-105 hover:from-blue-600 hover:to-indigo-600' 
+                                                        : 'bg-gradient-to-r from-blue-500 to-indigo-500 px-3 py-2 text-sm hover:scale-105 hover:from-blue-600 hover:to-indigo-600'
+                                                ]"
                                             >
-                                                <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <svg :class="user?.role === 'admin' ? 'mr-2 h-5 w-5' : 'mr-2 h-4 w-4'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path
                                                         stroke-linecap="round"
                                                         stroke-linejoin="round"
@@ -661,8 +709,9 @@
                                                         d="M8 9l4-4 4 4m0 6l-4 4-4-4"
                                                     />
                                                 </svg>
-                                                Status
-                                                <svg class="ml-1 h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <span v-if="user?.role === 'admin'">STATUS</span>
+                                                <span v-else>Status</span>
+                                                <svg :class="user?.role === 'admin' ? 'ml-2 h-4 w-4' : 'ml-1 h-3 w-3'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                                                 </svg>
                                             </button>
@@ -674,7 +723,7 @@
                                             >
                                                 <div class="py-1">
                                                     <button
-                                                        v-if="request.status !== 'pending'"
+                                                        v-if="request.status === 'approved' || request.status === 'cancelled'"
                                                         @click="changeStatusQuick(request.id, 'pending')"
                                                         class="flex w-full items-center px-4 py-2 text-sm text-yellow-700 transition-colors duration-200 hover:bg-yellow-50"
                                                     >
@@ -726,21 +775,33 @@
                                         <div v-if="request.status === 'pending'" class="flex space-x-2">
                                             <button
                                                 @click="updateStatus(request.id, 'approved')"
-                                                class="group relative inline-flex transform items-center rounded-lg bg-gradient-to-r from-green-500 to-emerald-500 px-4 py-2 font-medium text-white shadow-lg transition-all duration-200 hover:scale-105 hover:from-green-600 hover:to-emerald-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                                                :class="[
+                                                    'group relative inline-flex transform items-center rounded-lg font-medium text-white shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2',
+                                                    user?.role === 'admin' 
+                                                        ? 'bg-gradient-to-r from-green-500 to-emerald-500 px-5 py-3 text-base hover:scale-105 hover:from-green-600 hover:to-emerald-600' 
+                                                        : 'bg-gradient-to-r from-green-500 to-emerald-500 px-4 py-2 text-sm hover:scale-105 hover:from-green-600 hover:to-emerald-600'
+                                                ]"
                                             >
-                                                <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <svg :class="user?.role === 'admin' ? 'mr-2 h-5 w-5' : 'mr-2 h-4 w-4'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                                 </svg>
-                                                ✅ Aprovar
+                                                <span v-if="user?.role === 'admin'">✅ APROVAR</span>
+                                                <span v-else>✅ Aprovar</span>
                                             </button>
                                             <button
                                                 @click="updateStatus(request.id, 'cancelled')"
-                                                class="group relative inline-flex transform items-center rounded-lg bg-gradient-to-r from-red-500 to-pink-500 px-4 py-2 font-medium text-white shadow-lg transition-all duration-200 hover:scale-105 hover:from-red-600 hover:to-pink-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                                                :class="[
+                                                    'group relative inline-flex transform items-center rounded-lg font-medium text-white shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2',
+                                                    user?.role === 'admin' 
+                                                        ? 'bg-gradient-to-r from-red-500 to-pink-500 px-5 py-3 text-base hover:scale-105 hover:from-red-600 hover:to-pink-600' 
+                                                        : 'bg-gradient-to-r from-red-500 to-pink-500 px-4 py-2 text-sm hover:scale-105 hover:from-red-600 hover:to-pink-600'
+                                                ]"
                                             >
-                                                <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <svg :class="user?.role === 'admin' ? 'mr-2 h-5 w-5' : 'mr-2 h-4 w-4'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                                                 </svg>
-                                                ❌ Reprovar
+                                                <span v-if="user?.role === 'admin'">❌ REPROVAR</span>
+                                                <span v-else>❌ Reprovar</span>
                                             </button>
                                         </div>
 
@@ -767,7 +828,7 @@
                                                 Reprovar
                                             </button>
                                             <button
-                                                v-if="request.status !== 'pending'"
+                                                v-if="request.status === 'approved' || request.status === 'cancelled'"
                                                 @click="updateStatus(request.id, 'pending')"
                                                 class="group relative inline-flex transform items-center rounded-lg bg-gradient-to-r from-yellow-400 to-orange-400 px-3 py-2 font-medium text-white shadow-md transition-all duration-200 hover:scale-105 hover:from-yellow-500 hover:to-orange-500 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2"
                                             >
@@ -1005,9 +1066,9 @@ const loadRequests = async (page = 1) => {
 
         // Update stats
         stats.total = response.total;
-        stats.pending = response.data.filter((r) => r.status === 'pending').length;
-        stats.approved = response.data.filter((r) => r.status === 'approved').length;
-        stats.cancelled = response.data.filter((r) => r.status === 'cancelled').length;
+        stats.pending = response.data.filter((r: any) => r.status === 'pending').length;
+        stats.approved = response.data.filter((r: any) => r.status === 'approved').length;
+        stats.cancelled = response.data.filter((r: any) => r.status === 'cancelled').length;
     } catch {
         toast.error('Erro ao carregar solicitações');
     } finally {
@@ -1028,7 +1089,7 @@ const updateStatus = async (id: number, status: string) => {
         await travelRequestsStore.updateStatus(id, { status });
 
         // Mensagens personalizadas baseadas no status
-        const messages = {
+        const messages: { [key: string]: string } = {
             approved: '✅ Solicitação aprovada com sucesso!',
             cancelled: '❌ Solicitação reprovada com sucesso!',
             pending: '⏳ Solicitação marcada como pendente!',
