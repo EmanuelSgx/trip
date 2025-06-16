@@ -50,8 +50,8 @@ git --version
 
 ```bash
 # 1. Clone o repositório
-git clone https://github.com/seu-usuario/triptech.git
-cd triptech
+git clone https://github.com/EmanuelSgx/trip.git
+cd trip
 
 # 2. Instale dependências PHP
 composer install

@@ -65,8 +65,8 @@ Certifique-se de ter as seguintes ferramentas instaladas:
 ### 1️⃣ Clone o Repositório
 
 ```bash
-git clone https://github.com/seu-usuario/triptech.git
-cd triptech
+git clone https://github.com/EmanuelSgx/trip.git
+cd trip
 ```
 
 ### 2️⃣ Instale as Dependências
@@ -104,7 +104,7 @@ DB_DATABASE=database/database.sqlite
 # DB_CONNECTION=mysql
 # DB_HOST=127.0.0.1
 # DB_PORT=3306
-# DB_DATABASE=triptech
+# DB_DATABASE=trip
 # DB_USERNAME=seu_usuario
 # DB_PASSWORD=sua_senha
 ```
@@ -149,7 +149,7 @@ php artisan serve
 ## 📁 Estrutura do Projeto
 
 ```
-triptech/
+trip/
 ├── 📂 app/
 │   ├── Http/Controllers/Api/    # Controllers da API
 │   └── Models/                  # Models Eloquent
@@ -292,39 +292,3 @@ php artisan pail
 - Download em formato CSV
 - Dados filtrados
 - Formatação profissional
-
----
-
-## 🤝 Contribuição
-
-1. Fork o projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/nova-funcionalidade`)
-3. Commit suas mudanças (`git commit -m 'Adiciona nova funcionalidade'`)
-4. Push para a branch (`git push origin feature/nova-funcionalidade`)
-5. Abra um Pull Request
-
----
-
-## 📝 Licença
-
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
-
----
-
-## 📞 Suporte
-
-Para dúvidas ou suporte:
-
-- 📧 Email: suporte@triptech.com
-- 🐛 Issues: [GitHub Issues](https://github.com/seu-usuario/triptech/issues)
-- 📚 Documentação: [Wiki do Projeto](https://github.com/seu-usuario/triptech/wiki)
-
----
-
-<div align="center">
-
-**Desenvolvido com ❤️ pela equipe TripTech**
-
-⭐ Se este projeto foi útil, não esqueça de dar uma estrela!
-
-</div>
