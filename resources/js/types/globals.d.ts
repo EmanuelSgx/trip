@@ -14,6 +14,6 @@ declare module 'vite/client' {
 // Vue single file component declarations
 declare module '*.vue' {
     import type { DefineComponent } from 'vue';
-    const component: DefineComponent<{}, {}, any>;
+    const component: DefineComponent<Record<string, unknown>, Record<string, unknown>, any>;
     export default component;
 }

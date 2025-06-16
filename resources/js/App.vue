@@ -1,12 +1,12 @@
 <template>
-  <div id="app">
-    <router-view />
-    <ToastContainer />
-  </div>
+    <div id="app">
+        <router-view />
+        <ToastContainer />
+    </div>
 </template>
 
 <script setup lang="ts">
-import ToastContainer from '@/components/ToastContainer.vue'
+import ToastContainer from '@/components/ToastContainer.vue';
 // Main App component for TripTech
 </script>
 
