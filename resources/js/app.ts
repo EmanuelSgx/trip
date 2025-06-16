@@ -1,39 +1,25 @@
-import { createApp } from 'vue';
-import type { RouteRecordRaw } from 'vue-router';
-import { createRouter, createWebHistory } from 'vue-router';
+import { createInertiaApp } from '@inertiajs/vue3';
+import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
+import { createApp, DefineComponent, h } from 'vue';
+import { ZiggyVue } from 'ziggy-js';
 import '../css/app.css';
-import App from './App.vue';
-import Dashboard from './pages/Dashboard.vue';
-import Login from './pages/Login.vue';
-import Profile from './pages/Profile.vue';
-import Register from './pages/Register.vue';
 
-const routes: RouteRecordRaw[] = [
-    { path: '/', redirect: '/dashboard' },
-    { path: '/login', component: Login, name: 'login' },
-    { path: '/register', component: Register, name: 'register' },
-    { path: '/dashboard', component: Dashboard, name: 'dashboard', meta: { requiresAuth: true } },
-    { path: '/profile', component: Profile, name: 'profile', meta: { requiresAuth: true } },
-];
+const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
-const router = createRouter({
-    history: createWebHistory(),
-    routes,
+createInertiaApp({
+    title: (title) => `${title} - ${appName}`,
+    resolve: (name) =>
+        resolvePageComponent<DefineComponent>(
+            `./pages/${name}.vue`,
+            import.meta.glob<DefineComponent>('./pages/**/*.vue')
+        ),
+    setup({ el, App, props, plugin }) {
+        createApp({ render: () => h(App, props) })
+            .use(plugin)
+            .use(ZiggyVue)
+            .mount(el);
+    },
+    progress: {
+        color: '#4B5563',
+    },
 });
-
-// Navigation guard for authentication
-router.beforeEach((to, from, next) => {
-    const token = localStorage.getItem('auth_token');
-
-    if (to.meta.requiresAuth && !token) {
-        next('/login');
-    } else if ((to.path === '/login' || to.path === '/register') && token) {
-        next('/dashboard');
-    } else {
-        next();
-    }
-});
-
-const app = createApp(App);
-app.use(router);
-app.mount('#app');
