@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { HTMLAttributes } from 'vue'
+import { computed } from 'vue'
 import { cn } from '@/lib/utils'
-import { reactiveOmit } from '@vueuse/core'
 import {
   NavigationMenuRoot,
   type NavigationMenuRootEmits,
@@ -18,7 +18,10 @@ const props = withDefaults(defineProps<NavigationMenuRootProps & {
 })
 const emits = defineEmits<NavigationMenuRootEmits>()
 
-const delegatedProps = reactiveOmit(props, 'class', 'viewport')
+const delegatedProps = computed(() => {
+  const { class: _, viewport: __, ...rest } = props
+  return rest
+})
 const forwarded = useForwardPropsEmits(delegatedProps, emits)
 </script>
 

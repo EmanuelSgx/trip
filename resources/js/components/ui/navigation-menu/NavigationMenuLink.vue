@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { HTMLAttributes } from 'vue'
+import { computed } from 'vue'
 import { cn } from '@/lib/utils'
-import { reactiveOmit } from '@vueuse/core'
 import {
   NavigationMenuLink,
   type NavigationMenuLinkEmits,
@@ -12,7 +12,10 @@ import {
 const props = defineProps<NavigationMenuLinkProps & { class?: HTMLAttributes['class'] }>()
 const emits = defineEmits<NavigationMenuLinkEmits>()
 
-const delegatedProps = reactiveOmit(props, 'class')
+const delegatedProps = computed(() => {
+  const { class: _, ...rest } = props
+  return rest
+})
 const forwarded = useForwardPropsEmits(delegatedProps, emits)
 </script>
 

@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import type { HTMLAttributes } from 'vue'
+import { computed } from 'vue'
 import { cn } from '@/lib/utils'
-import { reactiveOmit } from '@vueuse/core'
 import { NavigationMenuItem, type NavigationMenuItemProps } from 'reka-ui'
 
 const props = defineProps<NavigationMenuItemProps & { class?: HTMLAttributes['class'] }>()
 
-const delegatedProps = reactiveOmit(props, 'class')
+const delegatedProps = computed(() => {
+  const { class: _, ...rest } = props
+  return rest
+})
 </script>
 
 <template>
